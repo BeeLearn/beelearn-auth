@@ -1,0 +1,9 @@
+{
+    "prettier.tabWidth": 2,
+    "prettier.endOfLine": "crlf",
+    "cSpell.words": [
+        "iconify",
+        "Noto",
+        "tabler"
+    ]
+}
