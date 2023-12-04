@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	import { string } from "yup";
+
 	export type Name = {
 		firstName: string,
 		lastName: string,
@@ -14,7 +16,13 @@
 	}
 
 	defineEmits<NameTabEmit>();
-	defineProps<NameTabProps>();
+	const prop = defineProps<NameTabProps>();
+
+	const nameSchema = string().min(2).required();
+	const disabled = computed(() => {
+		console.log(prop.value)
+		return !(nameSchema.isValidSync(prop.value?.firstName) && nameSchema.isValidSync(prop.value?.lastName));
+	});
 </script>
 <template>
 	<main class="flex-1 flex flex-col">
@@ -29,32 +37,35 @@
 			<div 
 				class="flex flex-col space-y-4" 
 				md="flex-row flex-wrap">
-				<div class="input text__input">
-					<UnoIcon class="i-mdi:account text-xl" />
-					<input 
-						:value="value?.firstName" 
-						class="flex-1 py-3" 
-						placeholder="First name" 
-						@keyup="event => {
-							const value = (event.currentTarget as HTMLInputElement).value;
-							$emit('update:value', { firstName: value });
-						 }" />
-				</div>
-				<div class="input text__input">
-					<UnoIcon class="i-mdi:account text-xl" />
-					<input 
-						:value="value?.lastName" 
-						class="flex-1 py-3" 
-						placeholder="Last name" 
-						@keyup="event => { 
-							const value = (event.currentTarget as HTMLInputElement).value;
-							$emit('update:value', { lastName: value });
-						}" />
-				</div>
+				<TextInput
+					:value="value?.firstName"
+					:schema="nameSchema"
+					placeholder="First name"
+					@keyup="event => {
+						const value = (event.currentTarget as HTMLInputElement).value;
+						$emit('update:value', { firstName: value });
+					}">
+					<template #prefix>
+						<UnoIcon class="i-mdi:account text-xl" />
+					</template>
+				</TextInput>
+				<TextInput 
+					:value="value?.lastName"
+					:schema="nameSchema"
+					placeholder="Last name"
+					@keyup="event => { 
+						const value = (event.currentTarget as HTMLInputElement).value;
+						$emit('update:value', { lastName: value });
+					}">
+					<template #prefix>
+						<UnoIcon class="i-mdi:account text-xl" />
+					</template>
+				</TextInput>
 			</div>
 		</div>
 		<footer class="flex flex-col p-4">
 			<button 
+				:disabled="disabled"
 				class="btn btn-primary items-center" 
 				@click="$emit('submit')">
 				<span class="flex-1">Next</span>

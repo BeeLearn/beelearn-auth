@@ -2,7 +2,7 @@
     import goalList, { type Goal } from "@/data/goals";
 
     type GoalTabProps = {
-        value?: Goal | null,
+        value: Goal | null,
     }
 
     type GoalTabEmit = {

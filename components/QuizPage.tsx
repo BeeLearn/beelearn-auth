@@ -1,13 +1,26 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 
+import type { Goal } from "~/data/goals";
 import type { Gender } from "~/data/genders";
 
-import GoalTab from "~/components/quizTabs/GoalTab.vue";
-import NameTab, { type Name } from "~/components/quizTabs/NameTab.vue";
-import GenderTab from "~/components/quizTabs/GenderTab.vue";
-import UsernameTab from "~/components/quizTabs/UsernameTab.vue";
-import InterestTab from "~/components/quizTabs/InterestTab.vue";
-import type { Goal } from "~/data/goals";
+import Icon from "./Icon.vue";
+import GoalTab from "./quizTabs/GoalTab.vue";
+import GenderTab from "./quizTabs/GenderTab.vue";
+import UsernameTab from "./quizTabs/UsernameTab.vue";
+import InterestTab from "./quizTabs/InterestTab.vue";
+import NameTab, { type Name } from "./quizTabs/NameTab.vue";
+
+type Payload = {
+  gender: string,
+  first_name: string,
+  last_name: string,
+  profile: {
+    daily_streak_minutes: number,
+  },
+  categories: {
+    add: number[]
+  },
+}
 
 const selectedIndex = ref(0);
 
@@ -15,21 +28,23 @@ const onNextPage = function () {
   selectedIndex.value += 1;
 }
 
-const goal = ref<Goal | null>();
+const goal = ref<Goal|null>(null);
 const name = ref<Partial<Name>>({});
 const username = ref<string | null>(null);
 const interests = ref<any[]>([]);
 const gender = ref<Gender | null>(null);
 
-const onSubmit = function () { 
+const payload = ref<Payload>();
+
+const onSubmit = function () {
   const payload = {
     first_name: name.value.firstName!,
     last_name: name.value.lastName!,
     profile: {
-
+      daily_streak_minutes: goal.value!.value,
     },
     categories: {
-      add: [],
+      add: interests.value.map(interest => interest.id),
     },
     gender: gender.value!.name.toUpperCase(),
   };
@@ -69,7 +84,7 @@ export default function QuizPage() {
       <TabGroup
         key={selectedIndex.value}
         as="div"
-        class="w-full flex-1 flex flex-col md:w-1/2 lg:w-1/3"
+        class="w-full flex-1 flex flex-col md:w-1/2 lg:w-1/3 overflow-y-scroll"
         selectedIndex={selectedIndex.value}
         onChange={index => selectedIndex.value = index}>
         <TabList
@@ -81,7 +96,7 @@ export default function QuizPage() {
                 <Tab
                   as="div"
                   disabled={index > selectedIndex.value}>
-                  <UnoIcon
+                  <Icon
                     class={
                       index === selectedIndex.value ?
                         'i-mdi:circle text-violet-700 text-lg' :

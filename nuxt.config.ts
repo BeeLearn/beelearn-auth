@@ -1,9 +1,13 @@
 import type { FirebaseOptions } from "firebase/app";
 
 export default defineNuxtConfig({
-  css: ["@unocss/reset/tailwind.css", "@/global.css"],
+  css: [
+    "@unocss/reset/tailwind.css",
+    "vue-toast-notification/dist/theme-sugar.css",
+    "@/global.css",
+  ],
   devtools: { enabled: false },
-  modules: ["@unocss/nuxt", "@nuxtjs/google-fonts"],
+  modules: ["@unocss/nuxt", "@nuxtjs/google-fonts", "@pinia/nuxt"],
   runtimeConfig: {
     public: {
       iosBundleId: "",

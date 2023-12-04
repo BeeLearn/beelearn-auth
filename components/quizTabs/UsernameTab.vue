@@ -1,15 +1,41 @@
 <script setup lang="ts">
-    type UsernameTabProps = {
-			value: string | null,
-		}
+  import { string } from "yup";
+import Api from "~/lib/api";
 
-    type UsernameTabEmit = {
-			(event: 'submit') : void,
-			(event: 'update:value', value: string): void,
-		}
+  type UsernameTabProps = {
+		value: string | null,
+	}
 
-    defineEmits<UsernameTabEmit>();
-    defineProps<UsernameTabProps>();
+  type UsernameTabEmit = {
+		(event: 'submit') : void,
+  	(event: 'update:value', value?: string | null): void,
+	}
+
+  const prop = defineProps<UsernameTabProps>();
+  const emit = defineEmits<UsernameTabEmit>();
+
+  const disabled = ref(true);
+  const username = ref<string | null>(prop.value);
+
+  const usernameSchema = string().trim().min(3).required()
+  .test(
+    "username exist test", 
+    "username already exists!", 
+    async (value) => {
+      if(value.trim().length < 3) return false;
+
+      const { data } = await Api.instance.userProvider.usernameExist(value);
+      return !data.exists;
+    });
+
+  watch(username, value => {
+      usernameSchema.isValid(value)
+      .then((state) => {
+        disabled.value = !state;
+      });
+  
+    emit('update:value', value);
+  });
 </script>
 <template>
   <main class="flex-1 flex flex-col">
@@ -21,17 +47,19 @@
       </div>
     </header>
    <div class="flex-1 flex flex-col p-4">
-      <div class="input flex space-x-2 items-center border bg-white px-2 rounded-lg">
-        <UnoIcon class="i-tabler:at text-xl" />
-        <input
-					:value="value"
-          placeholder="Username" 
-          class="flex-1 p-3"
-					@keyup="event =>  $emit('update:value', (event.currentTarget as HTMLInputElement).value)"/>
-      </div>
+      <TextInput 
+        v-model:value="username"
+        :use-keyup="true"
+        :schema="usernameSchema"
+        placeholder="Username">
+        <template #prefix>
+          <UnoIcon class="i-tabler:at text-xl" />
+        </template>
+      </TextInput>
     </div>
     <footer class="flex flex-col p-4">
       <button
+        :disabled="disabled"
 				class="btn btn-primary px-8"
 				@click="$emit('submit')">
           <span class="flex-1">Continue</span>
@@ -40,3 +68,4 @@
     </footer>
   </main>
 </template>
+
