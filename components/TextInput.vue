@@ -21,6 +21,8 @@
 	let timer: number | undefined = undefined;
 
 	const handleEvent = function (event: Event) {
+		if(prop.useKeyup && event.type !== "keyup") return;
+		
 		const value = (event.target as HTMLInputElement).value;
 		emit('update:value', value);
 		prop.schema.validate(value)
@@ -48,6 +50,7 @@
 			<slot name="prefix" />
 			<input 
 				class="p-3" 
+				:value="value"
 				:placeholder="placeholder" 
 				@blur="handleEvent" 
 				@change="handleEvent"

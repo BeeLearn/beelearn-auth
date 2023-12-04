@@ -8,20 +8,28 @@ type UserStore = {
     displayName: string;
   } | null;
   user: User | null;
+  loading: boolean,
 };
 
 export const useUserStore = defineStore("user", {
   state: () =>
     ({
       user: null,
+      loading: true,
       firebaseUser: null,
     } as UserStore),
   actions: {
     async fetchUser() {
-      const { data } = await Api.instance.userProvider.getCurrentUser();
+      const { data } = await Api.firebaseInstance.userProvider.getCurrentUser();
       this.user = data;
 
       return data;
     },
+    async updateUser(body: Record<string, any>){
+      const { data } = await Api.firebaseInstance.userProvider.updateCurrentUser({ data: body });
+
+      this.user = data;
+      return data;
+    }
   },
 });

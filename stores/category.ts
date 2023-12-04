@@ -19,7 +19,7 @@ export const useCategoryStore = defineStore("category", {
   actions: {
     async fetchCategories(url?: string) {
       this.loading = "pending";
-
+      console.log(Api.instance)
       const { data } = await Api.instance.categoryProvider.list({
         url,
       });

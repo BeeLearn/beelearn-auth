@@ -7,23 +7,24 @@ export default defineNuxtPlugin(() => {
   const userStore = useUserStore();
 
   onAuthStateChanged(auth, async (firebaseUser) => {
-    try {
     if (firebaseUser) {
-      Api.accessToken = await firebaseUser.getIdToken();
+      Api.idToken = await firebaseUser.getIdToken();
       const user = await userStore.fetchUser();
 
       /// switch to auth token from backend
-      Api.accessToken = [user.token.key, "Token"];
+      Api.accessToken = user.token.key;
+      userStore.loading = false;
 
       if (
         !user.first_name ||
-        user.last_name ||
+        !user.last_name ||
+        !user.username || 
+        !user.gender ||
         user.categories.length === 0
       )
         return navigateTo("/sign-up/quiz/");
+    } else {
+      userStore.loading = false;
     }
-  }catch(e){
-    console.log(e)
-  }
   });
 });

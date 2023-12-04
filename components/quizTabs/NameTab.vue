@@ -2,27 +2,35 @@
 	import { string } from "yup";
 
 	export type Name = {
-		firstName: string,
-		lastName: string,
+		firstName: string | null,
+		lastName: string | null,
 	}
 
 	type NameTabProps = {
-		value: Partial<Name> | null,
+		value: Name,
 	}
 
 	type NameTabEmit = {
-		(event: 'submit'): Promise<void>,
-		(event: 'update:value', value: Partial<Name>): void,
+		(event: 'submit', callback: () => void): Promise<void>,
+		(event: 'update:value', value: Name): void,
 	}
 
-	defineEmits<NameTabEmit>();
+	const emit = defineEmits<NameTabEmit>();
 	const prop = defineProps<NameTabProps>();
 
 	const nameSchema = string().min(2).required();
 	const disabled = computed(() => {
-		console.log(prop.value)
-		return !(nameSchema.isValidSync(prop.value?.firstName) && nameSchema.isValidSync(prop.value?.lastName));
+		return !(
+			nameSchema.isValidSync(prop.value?.firstName) && 
+			nameSchema.isValidSync(prop.value?.lastName));
 	});
+
+	const isLoading = ref(false);
+
+	const onSubmit = function(){
+		isLoading.value = true;
+		return emit('submit', () => isLoading.value = false);
+	}
 </script>
 <template>
 	<main class="flex-1 flex flex-col">
@@ -42,8 +50,8 @@
 					:schema="nameSchema"
 					placeholder="First name"
 					@keyup="event => {
-						const value = (event.currentTarget as HTMLInputElement).value;
-						$emit('update:value', { firstName: value });
+						const val = (event.currentTarget as HTMLInputElement).value;
+						$emit('update:value', { firstName: val, lastName: value.lastName });
 					}">
 					<template #prefix>
 						<UnoIcon class="i-mdi:account text-xl" />
@@ -54,8 +62,8 @@
 					:schema="nameSchema"
 					placeholder="Last name"
 					@keyup="event => { 
-						const value = (event.currentTarget as HTMLInputElement).value;
-						$emit('update:value', { lastName: value });
+						const val = (event.currentTarget as HTMLInputElement).value;
+						$emit('update:value', { lastName: val, firstName: value.firstName });
 					}">
 					<template #prefix>
 						<UnoIcon class="i-mdi:account text-xl" />
@@ -64,18 +72,12 @@
 			</div>
 		</div>
 		<footer class="flex flex-col p-4">
-			<button 
+			<SubmitButton
+				:loading="isLoading"
 				:disabled="disabled"
-				class="btn btn-primary items-center" 
-				@click="$emit('submit')">
-				<span class="flex-1">Next</span>
-				<UnoIcon class="i-tabler:arrow-right text-xl" />
-			</button>
+				@click="onSubmit">
+				<span>Continue</span>
+			</SubmitButton>
 		</footer>
 	</main>
 </template>
-<style scoped>
-	.text__input {
-		@apply flex-1 flex space-x-2 items-center border bg-white px-2 rounded-md;
-	}
-</style>

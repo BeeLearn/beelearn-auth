@@ -23,13 +23,15 @@ class ApiImpl {
 
 export default class Api {
   static instance: ApiImpl;
+  static firebaseInstance: ApiImpl;
 
   private constructor() {}
 
-  static set accessToken(value: string | [string, string]) {
-    if(typeof value === "string")
-      Api.instance = new ApiImpl(value);
-    else 
-      Api.instance = new ApiImpl(...value);
+  static set accessToken(value: string) {
+    Api.instance = new ApiImpl(value, "Token");
+  }
+
+  static set idToken(value: string) {
+    Api.firebaseInstance = new ApiImpl(value);
   }
 }

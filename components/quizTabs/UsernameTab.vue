@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { string } from "yup";
-import Api from "~/lib/api";
+  import Api from "~/lib/api";
 
   type UsernameTabProps = {
 		value: string | null,
@@ -8,14 +8,14 @@ import Api from "~/lib/api";
 
   type UsernameTabEmit = {
 		(event: 'submit') : void,
-  	(event: 'update:value', value?: string | null): void,
+  	(event: 'update:value', value: string | null): void,
 	}
 
   const prop = defineProps<UsernameTabProps>();
   const emit = defineEmits<UsernameTabEmit>();
 
   const disabled = ref(true);
-  const username = ref<string | null>(prop.value);
+  const username = computed(() => prop.value);
 
   const usernameSchema = string().trim().min(3).required()
   .test(
@@ -29,13 +29,13 @@ import Api from "~/lib/api";
     });
 
   watch(username, value => {
-      usernameSchema.isValid(value)
-      .then((state) => {
-        disabled.value = !state;
-      });
+    usernameSchema.isValid(value)
+    .then((state) => {
+      disabled.value = !state;
+    });
   
     emit('update:value', value);
-  });
+  }, { immediate: true });
 </script>
 <template>
   <main class="flex-1 flex flex-col">
@@ -48,10 +48,11 @@ import Api from "~/lib/api";
     </header>
    <div class="flex-1 flex flex-col p-4">
       <TextInput 
-        v-model:value="username"
+        :value="value"
         :use-keyup="true"
         :schema="usernameSchema"
-        placeholder="Username">
+        placeholder="Username"
+        @update:value="value => $emit('update:value', value)">
         <template #prefix>
           <UnoIcon class="i-tabler:at text-xl" />
         </template>

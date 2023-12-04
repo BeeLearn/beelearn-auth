@@ -17,6 +17,7 @@
 	const props = defineProps<InterestTabProps>();
 
 	const interests = ref(new Set<Category>(props.value));
+	console.log(interests)
 
 	const categories = computed(() => categoryStore.categories);
 	const isLoading = computed(() => categoryStore.isLoading);

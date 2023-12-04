@@ -9,18 +9,18 @@ import GenderTab from "./quizTabs/GenderTab.vue";
 import UsernameTab from "./quizTabs/UsernameTab.vue";
 import InterestTab from "./quizTabs/InterestTab.vue";
 import NameTab, { type Name } from "./quizTabs/NameTab.vue";
+import genders from "~/data/genders";
+import type { Category } from "~/lib/api/models/category.model";
 
-type Payload = {
-  gender: string,
-  first_name: string,
-  last_name: string,
-  profile: {
-    daily_streak_minutes: number,
-  },
-  categories: {
-    add: number[]
-  },
-}
+const toast = useToast();
+const userStore = useUserStore();
+
+const user = computed(() => userStore.user);
+const userGender = computed(() => {
+  const gender = genders.find(element => element.name.toLowerCase() === user.value?.gender.toLowerCase());
+  if(gender) gender.checked = true;
+  return gender ?? null;
+});
 
 const selectedIndex = ref(0);
 
@@ -29,15 +29,17 @@ const onNextPage = function () {
 }
 
 const goal = ref<Goal|null>(null);
-const name = ref<Partial<Name>>({});
 const username = ref<string | null>(null);
-const interests = ref<any[]>([]);
-const gender = ref<Gender | null>(null);
+const gender = ref<Gender | null>(userGender.value);
+const interests = ref<Category[]>(user.value!.categories);
+const name = ref<Name>({
+  firstName: user.value?.first_name ?? null,
+  lastName: user.value?.last_name ?? null,
+});
 
-const payload = ref<Payload>();
-
-const onSubmit = function () {
+const onSubmit = async function (callback: () => void) {
   const payload = {
+    username: username.value!,
     first_name: name.value.firstName!,
     last_name: name.value.lastName!,
     profile: {
@@ -49,7 +51,10 @@ const onSubmit = function () {
     gender: gender.value!.name.toUpperCase(),
   };
 
-  console.log(payload)
+  userStore.updateUser(payload)
+  .then(() => toast.success('Profile updated successfully'))
+  .catch(() => toast.error('An unexpected error occur. Try again!'))
+  .finally(() => callback());
 }
 
 export default function QuizPage() {
@@ -74,8 +79,8 @@ export default function QuizPage() {
       value={name.value}
       onSubmit={onSubmit}
       onUpdate:value={value => {
-        name.value.firstName = value.firstName ?? name.value.firstName;
-        name.value.lastName = value.lastName ?? name.value.lastName;
+        name.value.firstName = value.firstName;
+        name.value.lastName = value.lastName;
       }} />,
   ]);
 

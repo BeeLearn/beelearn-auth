@@ -7,7 +7,7 @@
 
     type GoalTabEmit = {
         (event: 'submit') : void,
-        (event: 'update:value', value?: Goal | null) : void,
+        (event: 'update:value', value: Goal | null) : void,
     }
 
     defineEmits <GoalTabEmit>();
