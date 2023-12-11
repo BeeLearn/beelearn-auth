@@ -25,9 +25,18 @@ export default class Api {
   static instance: ApiImpl;
   static firebaseInstance: ApiImpl;
 
-  private constructor() {}
+  private constructor() {
+  }
 
   static set accessToken(value: string) {
+    const config = useRuntimeConfig();
+
+    const accessToken = useCookie("accessToken", {
+      domain: config.public.dashboardDomain,
+      maxAge: 7 * 24 * 60 * 1000,
+    });
+
+    accessToken.value = value;
     Api.instance = new ApiImpl(value, "Token");
   }
 

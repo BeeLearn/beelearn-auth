@@ -12,6 +12,8 @@ export default defineNuxtConfig({
     public: {
       iosBundleId: "",
       androidPackageName: "",
+      dashboardDomain: "",
+      dashboardBaseUrl: "",
       firebaseConfig: {} as FirebaseOptions,
     },
   },

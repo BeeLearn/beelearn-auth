@@ -13,12 +13,14 @@ import genders from "~/data/genders";
 import type { Category } from "~/lib/api/models/category.model";
 
 const toast = useToast();
+const route = useRoute();
 const userStore = useUserStore();
+const config = useRuntimeConfig();
 
 const user = computed(() => userStore.user);
 const userGender = computed(() => {
   const gender = genders.find(element => element.name.toLowerCase() === user.value?.gender.toLowerCase());
-  if(gender) gender.checked = true;
+  if (gender) gender.checked = true;
   return gender ?? null;
 });
 
@@ -28,7 +30,7 @@ const onNextPage = function () {
   selectedIndex.value += 1;
 }
 
-const goal = ref<Goal|null>(null);
+const goal = ref<Goal | null>(null);
 const username = ref<string | null>(null);
 const gender = ref<Gender | null>(userGender.value);
 const interests = ref<Category[]>(user.value!.categories);
@@ -52,9 +54,14 @@ const onSubmit = async function (callback: () => void) {
   };
 
   userStore.updateUser(payload)
-  .then(() => toast.success('Profile updated successfully'))
-  .catch(() => toast.error('An unexpected error occur. Try again!'))
-  .finally(() => callback());
+    .then(() => {
+      toast.success('Profile updated successfully');
+      const redirect = route.query.redirect as string;
+      if (redirect) window.location.replace(redirect);
+      else window.location.replace(config.public.dashboardBaseUrl);
+    })
+    .catch(() => toast.error('An unexpected error occur. Try again!'))
+    .finally(() => callback());
 }
 
 export default function QuizPage() {
