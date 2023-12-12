@@ -14,7 +14,6 @@ export default defineNuxtConfig({
       androidPackageName: "",
       dashboardDomain: "",
       dashboardBaseUrl: "",
-      firebaseConfig: {} as FirebaseOptions,
     },
   },
   googleFonts: {
