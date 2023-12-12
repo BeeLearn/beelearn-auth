@@ -14,7 +14,8 @@
         </header>
         <div
             v-if="isLoading" 
-            class="m-auto w-8 h-8 border-3 border-t-transparent border-violet-700 animate-spin rounded-full" />
+            class="m-auto w-8 h-8 border-3 border-t-transparent border-violet-700 animate-spin rounded-full">
+        </div>
         <div
             v-else
             class="flex-1 flex flex-col items-center overflow-y-scroll">

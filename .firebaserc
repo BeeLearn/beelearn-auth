@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "bee-learn"
+  },
+  "targets": {
+    "bee-learn": {
+      "hosting": {
+        "auth": [
+          "beelearn-auth"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
