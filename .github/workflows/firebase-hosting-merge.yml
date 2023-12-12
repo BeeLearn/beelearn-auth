@@ -21,6 +21,7 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BEE_LEARN }}"
           channelId: live
           projectId: bee-learn
+        env:
           NUXT_PUBLIC_API_BASE_URL: "${{ secrets.NUXT_PUBLIC_API_BASE_URL }}"
           NUXT_PUBLIC_IOS_BUNDLE_ID: "${{ secrets.NUXT_PUBLIC_IOS_BUNDLE_ID }}"
           NUXT_PUBLIC_FIREBASE_CONFIG: "${{ secrets.NUXT_PUBLIC_FIREBASE_CONFIG }}"
