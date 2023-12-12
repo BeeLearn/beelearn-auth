@@ -17,11 +17,6 @@ export default defineNuxtConfig({
       firebaseConfig: {} as FirebaseOptions,
     },
   },
-  build: {
-    rollupOptions: {
-      external: ["@headlessui/vue"],
-    },
-  },
   googleFonts: {
     families: {
       "Albert+Sans": [100, 200, 300, 400, 500, 600, 700, 800, 900],
@@ -34,5 +29,12 @@ export default defineNuxtConfig({
     stylePath: "css/font.css",
   },
   components: [{ path: "~/components" }, { path: "~/components/quizTabs" }],
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ["@headlessui/vue"],
+      },
+    },
+  },
 });
 
