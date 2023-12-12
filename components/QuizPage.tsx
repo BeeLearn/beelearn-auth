@@ -1,7 +1,10 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 
+import genders from "~/data/genders";
 import type { Goal } from "~/data/goals";
 import type { Gender } from "~/data/genders";
+
+import type { Category } from "~/lib/api/models/category.model";
 
 import Icon from "./Icon.vue";
 import GoalTab from "./quizTabs/GoalTab.vue";
@@ -9,8 +12,6 @@ import GenderTab from "./quizTabs/GenderTab.vue";
 import UsernameTab from "./quizTabs/UsernameTab.vue";
 import InterestTab from "./quizTabs/InterestTab.vue";
 import NameTab, { type Name } from "./quizTabs/NameTab.vue";
-import genders from "~/data/genders";
-import type { Category } from "~/lib/api/models/category.model";
 
 const toast = useToast();
 const route = useRoute();
