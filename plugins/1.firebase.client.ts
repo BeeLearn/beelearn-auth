@@ -26,7 +26,7 @@ export default defineNuxtPlugin(() => {
         !user.gender ||
         user.categories.length === 0
       )
-        return navigateTo("/sign-up/quiz/");
+        return navigateTo("/sign-up/onboarding/");
       else {
         const redirect = route.query.redirect as string;
         if (redirect) window.location.replace(redirect);

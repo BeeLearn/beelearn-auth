@@ -13,60 +13,58 @@ import UsernameTab from "./quizTabs/UsernameTab.vue";
 import InterestTab from "./quizTabs/InterestTab.vue";
 import NameTab, { type Name } from "./quizTabs/NameTab.vue";
 
-const toast = useToast();
-const route = useRoute();
-const router = useRouter();
-const userStore = useUserStore();
-const config = useRuntimeConfig();
-
-const user = computed(() => userStore.user);
-const userGender = computed(() => {
-  const gender = genders.find(element => element.name.toLowerCase() === user.value?.gender.toLowerCase());
-  if (gender) gender.checked = true;
-  return gender ?? null;
-});
 
 const selectedIndex = ref(0);
-
-const onNextPage = function () {
-  selectedIndex.value += 1;
-}
-
-const goal = ref<Goal | null>(null);
-const username = ref<string | null>(null);
-const gender = ref<Gender | null>(userGender.value);
-const interests = ref<Category[]>(user.value!.categories);
-const name = ref<Name>({
-  firstName: user.value?.first_name ?? null,
-  lastName: user.value?.last_name ?? null,
-});
-
-const onSubmit = async function (callback: () => void) {
-  const payload = {
-    username: username.value!,
-    first_name: name.value.firstName!,
-    last_name: name.value.lastName!,
-    profile: {
-      daily_streak_minutes: goal.value!.value,
-    },
-    categories: {
-      add: interests.value.map(interest => interest.id),
-    },
-    gender: gender.value!.name.toUpperCase(),
-  };
-
-  userStore.updateUser(payload)
-    .then(() => {
-      toast.success('Profile updated successfully');
-      const redirect = route.query.redirect as string;
-      if (redirect) window.location.replace(redirect);
-      else window.location.replace(config.public.dashboardBaseUrl);
-    })
-    .catch(() => toast.error('An unexpected error occur. Try again!'))
-    .finally(() => callback());
-}
+const onNextPage = () => selectedIndex.value += 1;
 
 export default function QuizPage() {
+  const toast = useToast();
+  const route = useRoute();
+  const userStore = useUserStore();
+  const config = useRuntimeConfig();
+
+  const user = computed(() => userStore.user!);
+  const userGender = computed(() => {
+    const gender = genders.find(element => element.name.toLowerCase() === user.value.gender.toLowerCase());
+    if (gender) gender.checked = true;
+    return gender ?? null;
+  });
+
+  const goal = ref<Goal | null>(null);
+  const username = ref<string | null>(null);
+  const gender = ref<Gender | null>(userGender.value);
+  const interests = ref<Category[]>(user.value!.categories);
+
+  const name = ref<Name>({
+    lastName: user.value.last_name ?? null,
+    firstName: user.value.first_name ?? null,
+  });
+
+  const onSubmit = async function (callback: () => void) {
+    const payload = {
+      username: username.value!,
+      last_name: name.value.lastName!,
+      first_name: name.value.firstName!,
+      profile: {
+        daily_streak_minutes: goal.value!.value,
+      },
+      categories: {
+        add: interests.value.map(interest => interest.id),
+      },
+      gender: gender.value!.name.toUpperCase(),
+    };
+
+    userStore.updateUser(payload)
+      .then(() => {
+        toast.success('Profile updated successfully');
+        const redirect = route.query.redirect as string;
+        if (redirect) window.location.replace(redirect);
+        else window.location.replace(config.public.dashboardBaseUrl);
+      })
+      .catch(() => toast.error('An unexpected error occur. Try again!'))
+      .finally(() => callback());
+  }
+
   const tabs = computed(() => [
     <GenderTab
       value={gender.value}
@@ -92,10 +90,6 @@ export default function QuizPage() {
         name.value.lastName = value.lastName;
       }} />,
   ]);
-
-  onMounted(() => {
-    if (userStore.user === null) router.replace("/");
-  });
 
   return (
     <>

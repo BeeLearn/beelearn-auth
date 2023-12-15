@@ -29,12 +29,12 @@ export default defineNuxtConfig({
     stylePath: "css/font.css",
   },
   components: [{ path: "~/components" }, { path: "~/components/quizTabs" }],
-  vite: {
-    build: {
-      rollupOptions: {
-        external: ["@headlessui/vue"],
-      },
-    },
-  },
+  // vite: {
+  //   build: {
+  //     rollupOptions: {
+  //       external: ["@headlessui/vue"],
+  //     },
+  //   },
+  // },
 });
 
