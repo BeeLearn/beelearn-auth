@@ -46,3 +46,4 @@ export default class Api {
     Api.firebaseInstance = new ApiImpl(value);
   }
 }
+
