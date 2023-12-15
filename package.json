@@ -5,7 +5,7 @@
   "scripts": {
     "vite": "vite",
     "build": "nuxt build",
-    "dev": "nuxt dev --port=5000",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

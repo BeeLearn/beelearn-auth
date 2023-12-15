@@ -15,6 +15,7 @@ import NameTab, { type Name } from "./quizTabs/NameTab.vue";
 
 const toast = useToast();
 const route = useRoute();
+const router = useRouter();
 const userStore = useUserStore();
 const config = useRuntimeConfig();
 
@@ -91,6 +92,10 @@ export default function QuizPage() {
         name.value.lastName = value.lastName;
       }} />,
   ]);
+
+  onMounted(() => {
+    if (userStore.user === null) router.replace("/");
+  });
 
   return (
     <>
