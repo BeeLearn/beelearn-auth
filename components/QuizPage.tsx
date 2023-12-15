@@ -13,7 +13,6 @@ import UsernameTab from "./quizTabs/UsernameTab.vue";
 import InterestTab from "./quizTabs/InterestTab.vue";
 import NameTab, { type Name } from "./quizTabs/NameTab.vue";
 
-
 const selectedIndex = ref(0);
 const onNextPage = () => selectedIndex.value += 1;
 
