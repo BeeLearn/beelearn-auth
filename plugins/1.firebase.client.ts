@@ -10,6 +10,7 @@ export default defineNuxtPlugin(() => {
 
   onAuthStateChanged(auth, async (firebaseUser) => {
     userStore.loading = true;
+    const route = useRoute();
 
     if (firebaseUser) {
       Api.idToken = await firebaseUser.getIdToken();
@@ -20,11 +21,12 @@ export default defineNuxtPlugin(() => {
       userStore.loading = false;
 
       if (
-        !user.first_name ||
-        !user.last_name ||
-        !user.username ||
-        !user.gender ||
-        user.categories.length === 0
+        route.path !== "/signup/onboarding/" &&
+        (!user.first_name ||
+          !user.last_name ||
+          !user.username ||
+          !user.gender ||
+          user.categories.length === 0)
       )
         return navigateTo("/sign-up/onboarding/");
       else {

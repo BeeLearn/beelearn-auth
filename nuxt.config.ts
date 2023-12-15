@@ -1,5 +1,3 @@
-import type { FirebaseOptions } from "firebase/app";
-
 export default defineNuxtConfig({
   css: [
     "@unocss/reset/tailwind.css",
@@ -8,6 +6,7 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: false },
   modules: ["@unocss/nuxt", "@nuxtjs/google-fonts", "@pinia/nuxt"],
+
   runtimeConfig: {
     public: {
       apiBaseUrl: "",
@@ -29,12 +28,15 @@ export default defineNuxtConfig({
     stylePath: "css/font.css",
   },
   components: [{ path: "~/components" }, { path: "~/components/quizTabs" }],
-  vite: {
-    build: {
-      rollupOptions: {
-        external: ["@headlessui/vue"],
-      },
-    },
-  },
+  // vite: {
+  //   // optimizeDeps: {
+  //   //   exclude: ["@headlessui/vue"],
+  //   // },
+  //   // build: {
+  //   //   rollupOptions: {
+  //   //     external: ["@headlessui/vue"],
+  //   //   },
+  //   // },
+  // },
 });
 
