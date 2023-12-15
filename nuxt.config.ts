@@ -10,10 +10,11 @@ export default defineNuxtConfig({
   modules: ["@unocss/nuxt", "@nuxtjs/google-fonts", "@pinia/nuxt"],
   runtimeConfig: {
     public: {
+      apiBaseUrl: "",
       iosBundleId: "",
-      androidPackageName: "",
       dashboardDomain: "",
       dashboardBaseUrl: "",
+      androidPackageName: "",
     },
   },
   googleFonts: {

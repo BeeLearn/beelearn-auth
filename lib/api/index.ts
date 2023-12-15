@@ -9,8 +9,10 @@ class ApiImpl {
   readonly categoryProvider: CategoryProvider;
 
   constructor(accessToken: string, public keyword: string = "Bearer") {
+    const config = useRuntimeConfig();
+
     this.axios = axios.create({
-      baseURL: "http://localhost:8000/",
+      baseURL: config.public.apiBaseUrl,
       headers: {
         Authorization: this.keyword + " " + accessToken,
       },
