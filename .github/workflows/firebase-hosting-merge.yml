@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: pnpm install && pnpm run build && pnpm run generate
         env:
+          NUXT_PUBLIC_ROOT_DOMAIN: ${{ secrets.NUXT_PUBLIC_ROOT_DOMAIN }}
           NUXT_PUBLIC_API_BASE_URL: ${{ secrets.NUXT_PUBLIC_API_BASE_URL }}
           NUXT_PUBLIC_IOS_BUNDLE_ID: ${{ secrets.NUXT_PUBLIC_IOS_BUNDLE_ID }}
           NUXT_PUBLIC_DASHBOARD_DOMAIN: ${{ secrets.NUXT_PUBLIC_DASHBOARD_DOMAIN }}
