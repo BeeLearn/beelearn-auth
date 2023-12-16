@@ -4,7 +4,6 @@ import Api from "~/lib/api";
 
 export default defineNuxtPlugin(() => {
   const auth = getAuth();
-  const route = useRoute();
   const userStore = useUserStore();
   const config = useRuntimeConfig();
 
