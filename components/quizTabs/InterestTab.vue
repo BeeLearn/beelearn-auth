@@ -17,10 +17,14 @@
 	const props = defineProps<InterestTabProps>();
 
 	const interests = ref(new Set<Category>(props.value));
-	console.log(interests)
 
+	const nextUrl = computed(() => categoryStore.next);
 	const categories = computed(() => categoryStore.categories);
 	const isLoading = computed(() => categoryStore.isLoading);
+
+	const loadMore = async function(){
+		await categoryStore.fetchNextCategories(nextUrl.value!);
+	}
 
 	useAsyncData(async () => {
 		if(categoryStore.loading === "idle")
@@ -39,7 +43,7 @@
 		<div class="flex-1 flex flex-col space-y-3 px-4 overflow-y-scroll">
 			<div 
 				v-if="isLoading"
-				class="m-auto w-8 h-8 border-3 border-violet-700 border-t-transparent animate-spin rounded-full"></div>
+				class="m-auto w-8 h-8 progress progress-primary"></div>
 			<ToggleButton 
 				v-else
 				v-for="category in categories" 
@@ -56,6 +60,9 @@
 					class="w-8 h-8" />
 				<p>{{ category.name }}</p>
 			</ToggleButton>
+			<LoadMore
+				v-if="nextUrl"
+				:on-load-more="loadMore" />
 		</div>
 		<footer class="flex flex-col p-4 static bottom-0">
 			<button 

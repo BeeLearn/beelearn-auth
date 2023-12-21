@@ -2,9 +2,12 @@
 	@apply accent-violet-700;
 }
 
+::-webkit-scrollbar { width: 0;}
+
 body {
 	font-size: 14px;
 	font-family: 'Albert Sans';
+	scrollbar-width: 0;
 }
 
 [role="img"] {
@@ -66,4 +69,16 @@ input {
 
 .toggle__button {
 	@apply flex space-x-2 items-center p-3 border rounded-md cursor-pointer;
+}
+
+.progress {
+	@apply  border-3 !border-t-transparent animate-spin rounded-full;
+}
+
+.progress-primary {
+	@apply border-violet-900;
+}
+
+.progress-inverse {
+	@apply border-white;
 }

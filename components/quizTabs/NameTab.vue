@@ -42,9 +42,7 @@
 			</div>
 		</header>
 		<div class="flex-1 flex flex-col p-4">
-			<div 
-				class="flex flex-col space-y-4" 
-				md="flex-row flex-wrap">
+			<div class="flex flex-col space-y-4">
 				<TextInput
 					:value="value?.firstName"
 					:schema="nameSchema"

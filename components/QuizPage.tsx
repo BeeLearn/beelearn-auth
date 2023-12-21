@@ -76,19 +76,20 @@ export default defineComponent({
                 <>
                   <Tab
                     as="div"
-                    disabled={index > selectedIndex.value}>
+                    disabled={index > selectedIndex.value}
+                    class={index > selectedIndex.value ? "" : "cursor-pointer"}>
                     <Icon
                       class={
                         index === selectedIndex.value ?
                           'i-mdi:circle text-violet-700 text-lg' :
                           index <= selectedIndex.value ?
                             'i-mdi:check-circle text-violet-700 text-lg' :
-                            'i-mdi:circle text-slate-400 text-lg'
+                            'i-mdi:circle text-stone-200 text-lg'
                       } />
                   </Tab>
                   {
                     index < this.tabs.length - 1 &&
-                    <div class="flex-1 bg-slate-300">
+                    <div class="flex-1 bg-stone-200">
                       <div class="w-1/10  p-0.3 transition-width duration-500" />
                     </div>
                   }

@@ -17,21 +17,25 @@ export const useCategoryStore = defineStore("category", {
       loading: "idle",
     } as CategoryState),
   actions: {
-    async fetchCategories(url?: string) {
+    async fetchCategories() {
       this.loading = "pending";
-      console.log(Api.instance)
+      const { data } = await Api.instance.categoryProvider.list();
+
+      this.next = data.next;
+      this.previous = data.previous;
+      this.loading = "success";
+
+      this.categories = data.results;
+    },
+    async fetchNextCategories(url: string) {
       const { data } = await Api.instance.categoryProvider.list({
         url,
       });
 
       this.next = data.next;
       this.previous = data.previous;
-      this.loading = "success";
 
-			console.log(data)
-
-      if (url) this.categories = this.categories!.concat(data.results);
-      else this.categories = data.results;
+      this.categories = this.categories!.concat(data.results);
     },
   },
   getters: {
